@@ -1,0 +1,17 @@
+{
+"name": "coupon-ed-frontend",
+"version": "0.1.0",
+"scripts": {
+"dev": "next dev -p 3000",
+"build": "next build",
+"start": "next start -p 3000"
+},
+"dependencies": {
+"next": "13.x",
+"react": "18.x",
+"react-dom": "18.x",
+"axios": "^1.4.0",
+"@google/generative-ai": "^0.1.0",
+"@google/generative-agents": "^0.1.0"
+}
+}
