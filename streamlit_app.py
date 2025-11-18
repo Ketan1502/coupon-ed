@@ -85,11 +85,37 @@ def dashboard_ui(sess):
             else:
                 st.error(r.text)
 
-    # --- My Coupons Tab ---
+ # --- My Coupons Tab ---
     with tabs[2]:
         st.subheader("My Coupons")
-        st.write("List of uploaded coupons will appear here (optional).")
 
+        headers = {"X-User-Id": sess["userId"]}
+        params = {"include_signed_url": True, "include_data": False}
+        try:
+            r = requests.get(f"{API_URL}/coupons/", headers=headers, params=params, timeout=20)
+            if not r.ok:
+                st.error(f"Failed to load coupons: {r.text}")
+            else:
+                data = r.json()
+                count = data.get("count", 0)
+                st.markdown(f"**Total coupons:** {count}")
+                coupons = data.get("coupons", [])
+                if not coupons:
+                    st.info("No coupons found.")
+                else:
+                    # Grid display
+                    cols_per_row = 3
+                    for i in range(0, len(coupons), cols_per_row):
+                        row = st.columns(cols_per_row)
+                        for col, coupon in zip(row, coupons[i:i+cols_per_row]):
+                            with col:
+                                url = coupon.get("signed_url")
+                                if url:
+                                    st.image(url, use_container_width=True)
+                                else:
+                                    st.warning("No signed URL")
+        except Exception as e:
+            st.error(f"Exception retrieving coupons: {e}")
 
 # --- LOGIN FORM ---
 def login_ui():
