@@ -1,0 +1,27 @@
+# Dockerfile for FastAPI backend (Cloud Run)
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+WORKDIR /app
+
+# Install build dependencies (some libraries like pyarrow may need build tools)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc \
+    libc-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the application source
+COPY . .
+
+# Use PORT env from Cloud Run; default to 8080
+ENV PORT 8080
+EXPOSE 8080
+
+# Run Uvicorn
+CMD ["sh", "-c", "exec uvicorn main:app --host 0.0.0.0 --port ${PORT}"]

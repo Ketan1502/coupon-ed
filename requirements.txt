@@ -4,4 +4,8 @@ python-multipart
 bcrypt
 google-cloud-firestore
 google-cloud-datastore
+google-cloud-storage
 google-auth
+google-cloud-aiplatform
+requests
+streamlit

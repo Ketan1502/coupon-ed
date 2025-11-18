@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Secrets
+keyfile.json
+.env
+
+# Docker
+*.tar
+
+# Build
+build/
+dist/
+
+# Streamlit
+.streamlit/
+
+# Optional: ignore local DBs
+*.sqlite3
