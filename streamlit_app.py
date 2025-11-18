@@ -5,8 +5,8 @@ import time
 
 API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
 
-st.set_page_config(page_title="Coupon Backend UI", layout="centered")
-st.title("Coupon Backend - Streamlit UI")
+st.set_page_config(page_title="Coupon-Ed!", layout="centered")
+st.title("Welcome to Coupon-Ed!")
 
 # --- SESSION SETUP ---
 if "page" not in st.session_state:
@@ -44,7 +44,7 @@ def dashboard_ui(sess):
     if st.sidebar.button("Logout"):
         logout()
 
-    st.header("Upload / Find Coupons")
+    st.subheader("Now ACTUALLY... make use of your coupons!")
 
     tabs = st.tabs(["Upload", "Find", "My Coupons"])
 
@@ -62,32 +62,28 @@ def dashboard_ui(sess):
                 headers = {"X-User-Id": sess["userId"]}
                 r = requests.post(f"{API_URL}/upload/", files=files, headers=headers)
 
-                if r.ok!= None:
-                    st.error(r.text)
+                if r.ok:
+                    st.success("Coupon Uploaded Successfully!")
                 else:
-                    st.success("Coupon Uploaded Successfully!!")
+                    st.error(r.text)                    
 
     # --- Find Tab ---
     with tabs[1]:
         st.subheader("Find coupons")
         user_prompt = st.text_area("Ask something", "I want to buy shoes, do I have any coupons?")
-        system_prompt = st.text_area("System prompt", "You are a coupon assistant.")
-        top_k = st.number_input("Top K", min_value=1, max_value=20, value=5)
 
         if st.button("Search"):
             headers = {"X-User-Id": sess["userId"], "Content-Type": "application/json"}
             payload = {
                 "user_prompt": user_prompt,
-                "system_prompt": system_prompt,
-                "top_k": int(top_k),
             }
             r = requests.post(f"{API_URL}/find/", json=payload, headers=headers)
 
-            if r.ok!= None:
-                st.error(r.text)
-            else:
+            if r.ok:
                 st.success("Search completed successfully!")
                 st.json(r.json())
+            else:
+                st.error(r.text)
 
     # --- My Coupons Tab ---
     with tabs[2]:
@@ -153,7 +149,7 @@ def register_ui():
 
 # --- WELCOME PAGE ---
 def welcome_ui():
-    st.header("Welcome")
+    st.subheader("Now ACTUALLY... make use of your coupons!")
 
     col1, col2 = st.columns(2)
     with col1:
